@@ -1,0 +1,10 @@
+target/
+src/main/resources/application-prod.properties
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+*.DS_Store
