@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping({"/results", "/"})
@@ -30,34 +28,16 @@ public class ResultController {
 
     @CrossOrigin
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    protected ResponseEntity<Results> getMyRecentResults() {
+    protected ResponseEntity<List<Result>> getMyRecentResults() {
         return this.getRecentResultsByUser(identity);
     }
 
-    protected ResponseEntity<Results> getRecentResultsByUser(String user) {
-        final Results results = new Results(user, resultService.fetchRecentResultsByUser(user));
+    protected ResponseEntity<List<Result>> getRecentResultsByUser(String user) {
+        final List<Result> results = resultService.fetchRecentResultsByUser(user);
         return ResponseEntity
                 .status(results.isEmpty()
                         ? HttpStatus.NOT_FOUND
                         : HttpStatus.OK)
                 .body(results);
-    }
-
-    protected static class Results {
-
-        public final String userName;
-
-        public final List<Result> results;
-
-        public Results(String userName, List<Result> results) {
-            this.userName = Objects.requireNonNull(userName);
-            this.results = Objects.isNull(results)
-                    ? Collections.emptyList()
-                    : results;
-        }
-
-        private boolean isEmpty() {
-            return this.results.isEmpty();
-        }
     }
 }
