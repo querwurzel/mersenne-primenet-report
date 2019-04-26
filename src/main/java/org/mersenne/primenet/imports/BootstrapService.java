@@ -62,6 +62,7 @@ public class BootstrapService {
         final LocalDate yesterday = LocalDate.now().minusDays(1);
         log.info("Importing results from yesterday [{}]", yesterday);
         importService.importDailyResults(yesterday);
+        System.gc();
     }
 
     private void bootstrapAnnualImports() {

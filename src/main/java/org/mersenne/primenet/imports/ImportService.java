@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
 import javax.xml.stream.XMLStreamException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -57,6 +58,7 @@ public class ImportService {
             log.info("Scheduling {} imports", imports.size());
             imports.forEach(this::importDailyResults);
             log.info("Processed {} imports", imports.size());
+            System.gc();
         }
     }
 
@@ -72,6 +74,7 @@ public class ImportService {
                 resultRepository.deleteAllByDate(theImport.getDate());
             });
             importRepository.saveAll(imports);
+            System.gc();
         }
     }
 
@@ -129,7 +132,7 @@ public class ImportService {
     }
 
     private Results parseResults(byte[] archive) throws IOException, XMLStreamException {
-        try (InputStream input = Bzip2.extract(archive)) {
+        try (InputStream input = new ByteArrayInputStream(Bzip2.extract(archive))) {
             return resultParser.parseResults(input);
         }
     }

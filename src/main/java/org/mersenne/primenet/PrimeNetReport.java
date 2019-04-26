@@ -12,9 +12,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 public class PrimeNetReport {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PrimeNetReport.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PrimeNetReport.class, args);
+    }
 
 }
-

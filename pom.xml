@@ -15,7 +15,7 @@
 
     <properties>
         <java.version>8</java.version>
-        <mysql.version>8.0.15</mysql.version>
+        <mysql.version>8.0.16</mysql.version>
         <apache.compress.version>1.18</apache.compress.version>
         <xz.version>1.8</xz.version>
         <junixsocket.version>2.2.0</junixsocket.version>
