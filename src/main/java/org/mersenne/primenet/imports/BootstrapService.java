@@ -79,7 +79,7 @@ public class BootstrapService {
         if (!days.isEmpty()) {
             log.info("Importing {} daily results as of {}", days.size(), importStart);
             days.forEach(importService::importDailyResults);
-            log.info("Imported daily results");
+            log.info("Imported {} daily results", days.size());
         }
     }
 
