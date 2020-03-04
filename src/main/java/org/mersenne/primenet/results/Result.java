@@ -39,6 +39,7 @@ public class Result implements Serializable {
     private String ghzDays;
 
     private String assignmentAge;
+    @Column(length = 512)
     private String message;
 
     @Transient
