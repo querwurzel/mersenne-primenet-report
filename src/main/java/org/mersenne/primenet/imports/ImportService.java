@@ -55,7 +55,7 @@ public class ImportService {
         final List<Import> imports = importRepository.findTop180ByState(State.PENDING);
 
         if (!imports.isEmpty()) {
-            log.info("Scheduling {} imports", imports.size());
+            log.info("Scheduling pending {} imports", imports.size());
             imports.forEach(this::importDailyResults);
             log.info("Processed {} imports", imports.size());
             System.gc();
