@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.13.RELEASE</version>
+        <version>2.2.6.RELEASE</version>
     </parent>
 
     <groupId>com.wilke.mersenne</groupId>
@@ -15,7 +15,7 @@
 
     <properties>
         <java.version>8</java.version>
-        <mysql.version>8.0.19</mysql.version>
+        <mysql.version>8.0.20</mysql.version>
         <apache.compress.version>1.20</apache.compress.version>
         <xz.version>1.8</xz.version>
         <junixsocket.version>2.3.2</junixsocket.version>

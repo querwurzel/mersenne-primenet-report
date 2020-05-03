@@ -35,6 +35,8 @@ public class AdministrativeController {
     @Scheduled(initialDelay = 60 * 1000, fixedDelay = 60 * 60 * 1000)
     protected void refreshMeta() {
         this.meta.set(new Meta()
+                .setUser(identity)
+                .setUserResults(administrativeService.countResultsByUserName(identity))
                 .setResults(administrativeService.countResults())
                 .setImportStates(administrativeService.countImportsPerState())
                 .setUser(identity)
@@ -50,21 +52,16 @@ public class AdministrativeController {
 
         public final LocalDateTime lastUpdated = LocalDateTime.now();
 
-        public final ImportMeta imports = new ImportMeta();
-
         public final UserMeta user = new UserMeta();
 
-        public long results = 0;
+        public final ImportMeta imports = new ImportMeta();
+
+        public final ResultMeta results = new ResultMeta();
 
         public Meta() {}
 
         public Meta(String user) {
             this.setUser(user);
-        }
-
-        public Meta setResults(long results) {
-            this.results = results;
-            return this;
         }
 
         public Meta setUser(String user) {
@@ -79,6 +76,11 @@ public class AdministrativeController {
 
         public Meta setImportStates(Map<State, Long> states) {
             this.imports.setStates(states);
+            return this;
+        }
+
+        public Meta setResults(long total) {
+            this.results.setTotal(total);
             return this;
         }
     }
@@ -116,6 +118,16 @@ public class AdministrativeController {
 
         public long getTotal() {
             return this.states.values().stream().mapToLong(value -> value).sum();
+        }
+    }
+
+    protected class ResultMeta {
+
+        public long total = 0;
+
+        public ResultMeta setTotal(long results) {
+            this.total = results;
+            return this;
         }
     }
 }
