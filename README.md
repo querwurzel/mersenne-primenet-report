@@ -6,7 +6,7 @@ and its ability to manage thousands of volunteers and millions of work assignmen
 There are currently 51 known Mersenne primes, 17 discovered by GIMPS (_state 2019-02-23_).
 
 As a GIMPS volunteer I wanted to observe and share my own results
-while growing a database to conduct statistics, time series analysis and means of data science on.
+while growing a database to perform statistics, time series analysis and means of data science.
   **This software collects the daily results of PrimeNet while offering an endpoint to publish your results.**
 
 More information:
