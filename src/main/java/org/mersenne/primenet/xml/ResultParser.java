@@ -10,8 +10,8 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 import static org.mersenne.primenet.xml.ResultParser.ResultSchema.*;
 
@@ -19,6 +19,8 @@ import static org.mersenne.primenet.xml.ResultParser.ResultSchema.*;
 public class ResultParser {
 
     private static final XMLInputFactory factory = XMLInputFactory.newFactory();
+
+    private static final int GIMPS_DAILY_AVG = 37_665;
 
     static {
         factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
@@ -28,7 +30,7 @@ public class ResultParser {
 
     public Results parseResults(InputStream stream) throws XMLStreamException {
         final XMLEventReader reader = factory.createXMLEventReader(stream);
-        final List<ResultLine> lines = new ArrayList<>();
+        final Queue<ResultLine> lines = new ArrayDeque<>(GIMPS_DAILY_AVG);
         final Results results = new Results(lines);
 
         try {

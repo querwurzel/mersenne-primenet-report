@@ -57,14 +57,6 @@ public class BootstrapService {
         };
     }
 
-    @Scheduled(cron = "33 33 3 * * *")
-    protected void bootstrapYesterdayImport() {
-        final LocalDate yesterday = LocalDate.now().minusDays(1);
-        log.info("Importing results from yesterday [{}]", yesterday);
-        importService.importDailyResults(yesterday);
-        System.gc();
-    }
-
     private void bootstrapAnnualImports() {
         final Set<LocalDate> years = this.selectAnnualImports(importStart);
         years.forEach(year -> {

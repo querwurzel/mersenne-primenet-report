@@ -2,27 +2,16 @@ package org.mersenne.primenet.xml;
 
 import javax.xml.stream.events.Attribute;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
+import java.util.Queue;
 
 public final class Results {
 
     private String date;
 
-    private List<ResultLine> results;
+    private final Queue<ResultLine> lines;
 
-    public Results () {}
-
-    public Results(List<ResultLine> results) {
-        this.results = results;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public LocalDate parseDate() {
-        return LocalDate.parse(date);
+    public Results(Queue<ResultLine> lines) {
+        this.lines = lines;
     }
 
     protected Results setDate(String date) {
@@ -31,23 +20,31 @@ public final class Results {
     }
 
     protected Results setDate(Attribute date) {
-        this.date = date.getValue();
+        this.setDate(date.getValue());
         return this;
     }
 
-    public List<ResultLine> getResults() {
-        return Collections.unmodifiableList(results);
+    public LocalDate parseDate() {
+        return LocalDate.parse(date);
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public Queue<ResultLine> getLines() {
+        return lines;
     }
 
     public boolean notEmpty() {
-        return !this.results.isEmpty();
+        return !this.lines.isEmpty();
     }
 
     @Override
     public String toString() {
         return "Results{" +
                 "date=" + date +
-                ", results=" + results +
+                ", results=" + lines +
                 '}';
     }
 }

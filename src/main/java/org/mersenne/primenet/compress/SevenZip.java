@@ -3,6 +3,8 @@ package org.mersenne.primenet.compress;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -11,12 +13,15 @@ import java.util.Objects;
 
 public final class SevenZip implements Iterable<byte[]>, Iterator<byte[]> {
 
+    private static final Logger log = LoggerFactory.getLogger(SevenZip.class);
+
     private final SevenZFile archive;
 
     private byte[] currentEntry = null;
 
     private SevenZip(byte[] archive) throws IOException {
         this.archive = new SevenZFile(new SeekableInMemoryByteChannel(archive));
+        log.debug("Reading 7zip archive of {} bytes", archive.length);
     }
 
     public static Iterable<byte[]> extract(byte[] archive) throws IOException {

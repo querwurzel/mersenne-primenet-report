@@ -19,16 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
 import javax.xml.stream.XMLStreamException;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 @Service
 public class ImportService {
@@ -48,6 +44,14 @@ public class ImportService {
         this.resultRepository = resultRepository;
         this.resultClient = resultArchiveClient;
         this.resultParser = resultParser;
+    }
+
+    @Scheduled(cron = "33 33 3 * * *")
+    protected void processYesterdayImport() {
+        final LocalDate yesterday = LocalDate.now().minusDays(1);
+        log.info("Importing results from yesterday [{}]", yesterday);
+        this.importDailyResults(yesterday);
+        System.gc();
     }
 
     @Scheduled(initialDelay = 2 * 60 * 1000, fixedDelay = 60 * 60 * 1000)
@@ -93,46 +97,55 @@ public class ImportService {
         }
     }
 
+    protected void importDailyResults(LocalDate date) {
+        this.importDailyResults(new Import(date));
+    }
+
     private void importDailyResults(byte[] archive) {
         try {
             final Results results = this.parseResults(archive);
             final LocalDate date = results.parseDate();
-            final Import theImport = new Import(date).nextAttempt();
-            this.persistImportAndResults(theImport, results);
+            this.importDailyResults(date, results);
         } catch (IOException | XMLStreamException e) {
             log.error("Failed to parse some results of annual archive", e);
         }
     }
 
-    protected void importDailyResults(LocalDate date) {
-        this.importDailyResults(new Import(date));
+    private void importDailyResults(LocalDate date, Results results) {
+        try {
+            final Import theImport = importRepository.save(new Import(date).nextAttempt());
+            this.persistImportAndResults(theImport, results);
+        } catch (DataIntegrityViolationException e) {
+            log.info("Import of {} already exists", date);
+        }
     }
 
-    private void importDailyResults(Import theImport) {
+    private void importDailyResults(Import anImport) {
         try {
-            theImport = importRepository.save(theImport.nextAttempt());
-            final Results results = this.parseResults(resultClient.fetchDailyReport(theImport.getDate()));
+            final Import theImport = importRepository.save(anImport.nextAttempt());
+            final byte[] archive = resultClient.fetchDailyReport(theImport.getDate());
+            final Results results = this.parseResults(archive);
             this.persistImportAndResults(theImport, results);
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.NOT_FOUND || e.getStatusCode() == HttpStatus.FORBIDDEN) {
-                log.error("Failed to fetch result archive of {}, HTTP {}", theImport.getDate(), e.getStatusCode());
+                log.error("Failed to fetch result archive of {}, HTTP {}", anImport.getDate(), e.getStatusCode());
             } else {
-                log.error("Failed to fetch result archive of {}", theImport.getDate(), e);
+                log.error("Failed to fetch result archive of {}", anImport.getDate(), e);
             }
-            importRepository.save(theImport.failed(e.getMessage()));
+            importRepository.save(anImport.failed(e.getMessage()));
         } catch (IOException | XMLStreamException e) {
-            log.error("Failed to parse results of {}", theImport.getDate(), e);
-            importRepository.save(theImport.failed(e.getMessage()));
+            log.error("Failed to parse results of {}", anImport.getDate(), e);
+            importRepository.save(anImport.failed(e.getMessage()));
         } catch (DataIntegrityViolationException e) {
-            log.info("Import of {} already exists", theImport.getDate());
+            log.info("Import of {} already exists", anImport.getDate());
         } catch (IllegalStateException e) {
-            log.warn("Import of {} has inconsistencies between state and attempts; resetting!", theImport.getDate());
-            importRepository.save(theImport.reset());
+            log.warn("Import of {} has inconsistencies between state and attempts; resetting!", anImport.getDate());
+            importRepository.save(anImport.reset());
         }
     }
 
     private Results parseResults(byte[] archive) throws IOException, XMLStreamException {
-        try (InputStream input = new ByteArrayInputStream(Bzip2.extract(archive))) {
+        try (InputStream input = Bzip2.stream(archive)) {
             return resultParser.parseResults(input);
         }
     }
@@ -143,22 +156,20 @@ public class ImportService {
         return archives;
     }
 
-    private void persistImportAndResults(Import anImport, Results result) {
-        try {
-            final Import theImport = importRepository.save(anImport.succeeded());
+    private void persistImportAndResults(Import theImport, Results result) {
+        if (result.notEmpty()) {
+            final Queue<ResultLine> lines = result.getLines();
+            final List<Result> results = new ArrayList<>(lines.size());
 
-            if (result.notEmpty()) {
-                final List<Result> results = result.getResults()
-                        .stream()
-                        .map(resultLine -> resultMapper.apply(theImport, resultLine))
-                        .collect(Collectors.toList());
-
-                resultRepository.saveAll(results);
-                log.info("Imported {} results of {}", String.format("%1$6s", results.size()), theImport.getDate());
+            for (Iterator<ResultLine> it = lines.iterator(); it.hasNext(); it.remove()) {
+                results.add(resultMapper.apply(theImport, it.next()));
             }
-        } catch (DataIntegrityViolationException e) {
-            log.info("Import of {} already exists", anImport.getDate());
+
+            resultRepository.saveAll(results);
+            log.info("Imported {} results of {}", String.format("%1$6s", results.size()), theImport.getDate());
         }
+
+        importRepository.save(theImport.succeeded());
     }
 
     private static final BiFunction<Import, ResultLine, Result> resultMapper = (theImport, line) -> new Result()

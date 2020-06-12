@@ -28,7 +28,9 @@ public class ResultArchiveClient {
     public byte[] fetchDailyReport(LocalDate date) {
         // https://www.mersenne.org/result_archive/2019/2019-01-29.xml.bz2
         final String url = String.format(dailyUrl, date.getYear(), date.format(DateTimeFormatter.ISO_LOCAL_DATE));
-        return this.fetchDailyReport(url);
+        final byte[] archive = this.fetchDailyReport(url);
+        log.debug("Fetched {} bytes for daily report of {}", archive.length, date.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        return archive;
     }
 
     public byte[] fetchDailyReport(String url) {
@@ -39,7 +41,9 @@ public class ResultArchiveClient {
     public byte[] fetchAnnualReport(LocalDate date) {
         // https://www.mersenne.org/result_archive/2018.7z
         final String url = String.format(annualUrl, date.getYear());
-        return this.fetchAnnualReport(url);
+        final byte[] archive = this.fetchAnnualReport(url);
+        log.debug("Fetched {} bytes for annual report of {}", archive.length, date.getYear());
+        return archive;
     }
 
     public byte[] fetchAnnualReport(String url) {
