@@ -156,19 +156,22 @@ public class ImportService {
     }
 
     private void persistImportAndResults(Import theImport, Results result) {
-        final List<Result> results = new ArrayList<>(result.size());
+        final int count = result.size();
+        final int chunkSize = 10_000;
+        final List<Result> results = new ArrayList<>(chunkSize);
 
-        if (result.notEmpty()) {
-            final Queue<ResultLine> lines = result.getLines();
-            for (Iterator<ResultLine> it = lines.iterator(); it.hasNext(); it.remove()) {
-                results.add(resultMapper.apply(theImport, it.next()));
+        for (final Iterator<ResultLine> it = result.getLines().iterator(); it.hasNext(); it.remove()) {
+            results.add(resultMapper.apply(theImport, it.next()));
+
+            if (results.size() >= chunkSize) {
+                resultRepository.saveAll(results);
+                results.clear();
             }
-
-            resultRepository.saveAll(results);
         }
 
+        resultRepository.saveAll(results);
         importRepository.save(theImport.succeeded());
-        log.info("Imported {} results of {}", String.format("%1$6s", results.size()), theImport.getDate());
+        log.info("Imported {} results of {}", String.format("%1$6s", count), theImport.getDate());
     }
 
     private static final BiFunction<Import, ResultLine, Result> resultMapper = (theImport, line) -> new Result()
