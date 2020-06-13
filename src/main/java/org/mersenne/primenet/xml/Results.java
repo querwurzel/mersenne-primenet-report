@@ -40,6 +40,10 @@ public final class Results {
         return !this.lines.isEmpty();
     }
 
+    public int size() {
+        return this.lines.size();
+    }
+
     @Override
     public String toString() {
         return "Results{" +

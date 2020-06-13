@@ -35,7 +35,6 @@ public class ImportService {
     private final ResultRepository resultRepository;
 
     private final ResultArchiveClient resultClient;
-
     private final ResultParser resultParser;
 
     @Autowired
@@ -72,7 +71,7 @@ public class ImportService {
         final List<Import> imports = importRepository.findAllByStateAndLastAttemptBefore(State.ACTIVE, threshold);
 
         if (!imports.isEmpty()) {
-            log.warn("Found {} stale imports; resetting!", imports.size());
+            log.warn("Resetting {} stale imports!", imports.size());
             imports.forEach(theImport -> {
                 theImport.reset();
                 resultRepository.deleteAllByDate(theImport.getDate());
@@ -128,9 +127,9 @@ public class ImportService {
             this.persistImportAndResults(theImport, results);
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.NOT_FOUND || e.getStatusCode() == HttpStatus.FORBIDDEN) {
-                log.error("Failed to fetch result archive of {}, HTTP {}", anImport.getDate(), e.getStatusCode());
+                log.error("Failed to fetch daily archive of {}, HTTP {}", anImport.getDate(), e.getStatusCode());
             } else {
-                log.error("Failed to fetch result archive of {}", anImport.getDate(), e);
+                log.error("Failed to fetch daily archive of {}", anImport.getDate(), e);
             }
             importRepository.save(anImport.failed(e.getMessage()));
         } catch (IOException | XMLStreamException e) {
@@ -157,19 +156,19 @@ public class ImportService {
     }
 
     private void persistImportAndResults(Import theImport, Results result) {
+        final List<Result> results = new ArrayList<>(result.size());
+
         if (result.notEmpty()) {
             final Queue<ResultLine> lines = result.getLines();
-            final List<Result> results = new ArrayList<>(lines.size());
-
             for (Iterator<ResultLine> it = lines.iterator(); it.hasNext(); it.remove()) {
                 results.add(resultMapper.apply(theImport, it.next()));
             }
 
             resultRepository.saveAll(results);
-            log.info("Imported {} results of {}", String.format("%1$6s", results.size()), theImport.getDate());
         }
 
         importRepository.save(theImport.succeeded());
+        log.info("Imported {} results of {}", String.format("%1$6s", results.size()), theImport.getDate());
     }
 
     private static final BiFunction<Import, ResultLine, Result> resultMapper = (theImport, line) -> new Result()
