@@ -5,5 +5,4 @@
  | |__| |_| |_| |  | | |     ____) |
   \_____|_____|_|  |_|_|    |_____/
 
-
- https://www.mersenne.org/
+ :: https://www.mersenne.org/ ::
