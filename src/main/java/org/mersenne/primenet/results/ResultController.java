@@ -36,7 +36,7 @@ public class ResultController {
         final List<Result> results = resultService.fetchRecentResultsByUser(user);
         return ResponseEntity
                 .status(results.isEmpty()
-                        ? HttpStatus.NOT_FOUND
+                        ? HttpStatus.NO_CONTENT
                         : HttpStatus.OK)
                 .body(results);
     }
