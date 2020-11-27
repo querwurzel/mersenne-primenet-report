@@ -20,7 +20,8 @@ public class ResultParser {
 
     private static final XMLInputFactory factory = XMLInputFactory.newFactory();
 
-    private static final int GIMPS_DAILY_AVG = 37_665;
+    // select avg(c.c) from (select count(date) as c from results group by date) as c;
+    private static final int GIMPS_DAILY_AVG = 40_057;
 
     static {
         factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
