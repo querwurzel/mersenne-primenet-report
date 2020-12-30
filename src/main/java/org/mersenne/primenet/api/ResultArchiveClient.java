@@ -1,4 +1,4 @@
-package org.mersenne.primenet.http;
+package org.mersenne.primenet.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

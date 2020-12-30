@@ -2,7 +2,7 @@ package org.mersenne.primenet.imports;
 
 import org.mersenne.primenet.compress.Bzip2;
 import org.mersenne.primenet.compress.SevenZip;
-import org.mersenne.primenet.http.ResultArchiveClient;
+import org.mersenne.primenet.api.ResultArchiveClient;
 import org.mersenne.primenet.imports.Import.State;
 import org.mersenne.primenet.results.Result;
 import org.mersenne.primenet.results.ResultRepository;
@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -46,6 +47,7 @@ public class ImportService {
     }
 
     @Scheduled(cron = "33 33 3 * * *")
+    @Async
     protected void processYesterdayImport() {
         final LocalDate yesterday = LocalDate.now().minusDays(1);
         log.info("Importing results from yesterday [{}]", yesterday);
@@ -54,6 +56,7 @@ public class ImportService {
     }
 
     @Scheduled(initialDelay = 2 * 60 * 1000, fixedDelay = 60 * 60 * 1000)
+    @Async
     protected void processPendingImports() {
         final List<Import> imports = importRepository.findTop180ByState(State.PENDING);
 
@@ -66,6 +69,7 @@ public class ImportService {
     }
 
     @Scheduled(initialDelay = 60 * 1000, fixedDelay = 12 * 60 * 60 * 1000)
+    @Async
     protected void processStaleImports() {
         final LocalDateTime threshold = LocalDateTime.now().minusHours(12);
         final List<Import> imports = importRepository.findAllByStateAndLastAttemptBefore(State.ACTIVE, threshold);
