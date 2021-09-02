@@ -124,12 +124,9 @@ public class MetaService implements GraphQLResolver<Meta> {
 
     public static class ImportMeta {
 
-        //public Map<State, Long> states;
-
         public List<Import> states;
 
         public ImportMeta() {
-            //this.states = Collections.emptyMap();
             this.states = Collections.emptyList();
         }
 
@@ -138,7 +135,6 @@ public class MetaService implements GraphQLResolver<Meta> {
         }
 
         public ImportMeta setStates(Map<State, Long> states) {
-            //this.states = Objects.requireNonNull(states);
             this.states = Objects.requireNonNull(states.entrySet().stream()
                     .map(entry -> new Import(entry.getKey(), entry.getValue()))
                     .collect(Collectors.toList()));
@@ -146,7 +142,6 @@ public class MetaService implements GraphQLResolver<Meta> {
         }
 
         public long getTotal() {
-            //return this.states.values().stream().mapToLong(value -> value).sum();
             return this.states.stream().mapToLong(value -> value.total).sum();
         }
     }

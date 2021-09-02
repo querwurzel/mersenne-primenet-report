@@ -25,7 +25,7 @@ public class ResultController {
     @CrossOrigin
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     protected ResponseEntity<List<Result>> getMyRecentResults() {
-        final List<Result> results = resultService.fetchRecentResultsByUser();
+        final List<Result> results = resultService.fetchRecentResults();
         return ResponseEntity
                 .status(results.isEmpty()
                         ? HttpStatus.NO_CONTENT

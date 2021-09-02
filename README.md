@@ -16,7 +16,7 @@ More information:
 
 ### Requirements
 
-* JDK 8+
+* JDK 11+
 * MySQL 5.7+
 
 ### How to configure
@@ -28,7 +28,7 @@ Have a look into the [application-sample.properties](https://github.com/querwurz
 * port and ip address (default: localhost:8191)
     * `server.address`
     * `server.port`
-* starting date of imports (YYYY-MM-DD; defaults to yesterday)
+* starting date of imports (YYYY-MM-DD; defaults to yesterday, 1997-11-11 is the very beginning)
     * `imports.start`
 * own username for export endpoint (defaults to anonymous)
     * `imports.identity`

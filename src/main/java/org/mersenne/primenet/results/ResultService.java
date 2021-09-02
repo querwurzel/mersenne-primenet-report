@@ -19,11 +19,7 @@ public class ResultService {
         this.identity = primeNetProperties.getIdentity();
     }
 
-    public List<Result> fetchRecentResultsByUser() {
-        return this.fetchRecentResultsByUser(identity);
-    }
-
-    public List<Result> fetchRecentResultsByUser(String user) {
-        return resultRepository.findTop10ByUserNameOrderByDateDesc(user);
+    public List<Result> fetchRecentResults() {
+        return resultRepository.findTop10ByUserNameOrderByDateDesc(this.identity);
     }
 }
