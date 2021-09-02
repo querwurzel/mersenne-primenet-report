@@ -18,7 +18,7 @@
         <mysql.version>8.0.26</mysql.version>
         <apache.compress.version>1.21</apache.compress.version>
         <xz.version>1.9</xz.version>
-        <junixsocket.version>2.3.2</junixsocket.version>
+        <junixsocket.version>2.4.0</junixsocket.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
