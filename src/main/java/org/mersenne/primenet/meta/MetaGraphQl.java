@@ -75,6 +75,6 @@ public class MetaGraphQl {
         public Meta getMeta() {
             return this.metaService.getMeta();
         }
-    };
+    }
 
 }

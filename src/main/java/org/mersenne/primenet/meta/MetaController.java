@@ -19,7 +19,7 @@ public class MetaController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    protected Meta getMetadata() {
+    protected Meta getMeta() {
         return metaService.getMeta();
     }
 

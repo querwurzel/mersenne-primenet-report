@@ -14,7 +14,7 @@ import java.util.Map.Entry;
 public interface ImportRepository extends ImportRepositoryCustom, JpaRepository<Import, LocalDate> {
 
     // used for retries
-    List<Import> findTop180ByState(State state);
+    List<Import> findTop180ByStateAndLastAttemptBefore(State state, LocalDateTime lastAttempt);
 
     // used for bootstrapping imports
     @Query("SELECT date FROM #{#entityName}")

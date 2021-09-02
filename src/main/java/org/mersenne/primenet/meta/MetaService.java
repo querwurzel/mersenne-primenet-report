@@ -38,7 +38,7 @@ public class MetaService implements GraphQLResolver<Meta> {
         this.meta = new AtomicReference<>(new Meta(this.identity));
     }
     
-    @Scheduled(initialDelay = 5 * 60 * 1000, fixedDelay = 60 * 60 * 1000)
+    @Scheduled(initialDelay = 5 * 60 * 1000, fixedRate = 60 * 60 * 1000)
     protected void refreshMeta() {
         this.meta.set(new Meta()
                 .setUser(identity)

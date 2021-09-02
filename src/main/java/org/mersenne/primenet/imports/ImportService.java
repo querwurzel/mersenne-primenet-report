@@ -58,7 +58,8 @@ public class ImportService {
     @Scheduled(initialDelay = 2 * 60 * 1000, fixedDelay = 60 * 60 * 1000)
     @Async
     protected void processPendingImports() {
-        final List<Import> imports = importRepository.findTop180ByState(State.PENDING);
+        final LocalDateTime threshold = LocalDateTime.now().minusDays(1);
+        final List<Import> imports = importRepository.findTop180ByStateAndLastAttemptBefore(State.PENDING, threshold);
 
         if (!imports.isEmpty()) {
             log.info("Scheduling pending {} imports", imports.size());
