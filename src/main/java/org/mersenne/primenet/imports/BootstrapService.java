@@ -13,8 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.Collections;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 @Service
@@ -57,7 +56,7 @@ public class BootstrapService {
     }
 
     private void bootstrapAnnualImports() {
-        final Set<LocalDate> years = this.selectAnnualImports(importStart);
+        final SortedSet<LocalDate> years = selectAnnualImports(importStart);
         years.forEach(year -> {
             log.info("Importing annual results for year {}", year.getYear());
             importService.importAnnualResults(year);
@@ -66,7 +65,9 @@ public class BootstrapService {
     }
 
     private void bootstrapDailyImports() {
-        final Set<LocalDate> days = this.selectDailyImports(importStart);
+        final SortedSet<LocalDate> days = selectDailyImports(importStart);
+        days.removeAll(importRepository.findAllDates());
+
         if (!days.isEmpty()) {
             log.info("Importing {} daily results as of {}", days.size(), importStart);
             days.forEach(importService::importDailyResults);
@@ -74,8 +75,8 @@ public class BootstrapService {
         }
     }
 
-    private Set<LocalDate> selectAnnualImports(LocalDate inclusiveStart) {
-        final Set<LocalDate> missing = new TreeSet<>();
+    private static SortedSet<LocalDate> selectAnnualImports(LocalDate inclusiveStart) {
+        final SortedSet<LocalDate> missing = new TreeSet<>();
 
         for (LocalDate year = LocalDate.now().minusYears(1).with(TemporalAdjusters.firstDayOfYear());
              !inclusiveStart.isAfter(year);
@@ -84,11 +85,11 @@ public class BootstrapService {
             missing.add(year);
         }
 
-        return Collections.unmodifiableSet(missing);
+        return missing;
     }
 
-    private Set<LocalDate> selectDailyImports(LocalDate inclusiveStart) {
-        final Set<LocalDate> missing = new TreeSet<>();
+    private static SortedSet<LocalDate> selectDailyImports(LocalDate inclusiveStart) {
+        final SortedSet<LocalDate> missing = new TreeSet<>();
 
         for (LocalDate day = LocalDate.now().minusDays(1);
              !inclusiveStart.isAfter(day);
@@ -97,7 +98,6 @@ public class BootstrapService {
             missing.add(day);
         }
 
-        missing.removeAll(importRepository.findAllDates());
-        return Collections.unmodifiableSet(missing);
+        return missing;
     }
 }

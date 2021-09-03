@@ -2,15 +2,15 @@ package org.mersenne.primenet.xml;
 
 import javax.xml.stream.events.Attribute;
 import java.time.LocalDate;
-import java.util.Queue;
+import java.util.Deque;
 
 public final class Results {
 
     private String date;
 
-    private final Queue<ResultLine> lines;
+    private final Deque<ResultLine> lines;
 
-    public Results(Queue<ResultLine> lines) {
+    public Results(Deque<ResultLine> lines) {
         this.lines = lines;
     }
 
@@ -32,7 +32,7 @@ public final class Results {
         return date;
     }
 
-    public Queue<ResultLine> getLines() {
+    public Deque<ResultLine> getLines() {
         return lines;
     }
 

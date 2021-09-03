@@ -155,9 +155,9 @@ public class ImportService {
     }
 
     private List<byte[]> parseArchives(byte[] annualArchive) throws IOException, NoSuchElementException {
-        final List<byte[]> archives = new ArrayList<>(365);
-        SevenZip.extract(annualArchive).forEach(archives::add);
-        return archives;
+        final List<byte[]> dailyArchives = new ArrayList<>(365);
+        SevenZip.extract(annualArchive).forEach(dailyArchives::add);
+        return dailyArchives;
     }
 
     private void persistImportAndResults(Import theImport, Results result) {

@@ -11,7 +11,7 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
 import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.Deque;
 
 import static org.mersenne.primenet.xml.ResultParser.ResultSchema.*;
 
@@ -31,7 +31,7 @@ public class ResultParser {
 
     public Results parseResults(InputStream stream) throws XMLStreamException {
         final XMLEventReader reader = factory.createXMLEventReader(stream);
-        final Queue<ResultLine> lines = new ArrayDeque<>(GIMPS_DAILY_AVG);
+        final Deque<ResultLine> lines = new ArrayDeque<>(GIMPS_DAILY_AVG);
         final Results results = new Results(lines);
 
         try {
