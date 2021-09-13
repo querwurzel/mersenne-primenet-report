@@ -68,7 +68,7 @@
         <dependency>
             <groupId>com.graphql-java-kickstart</groupId>
             <artifactId>graphql-java-tools</artifactId>
-            <version>6.3.0</version>
+            <version>11.1.2</version>
         </dependency>
 
         <dependency>
