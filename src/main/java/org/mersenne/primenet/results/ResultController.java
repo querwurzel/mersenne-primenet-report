@@ -24,12 +24,23 @@ public class ResultController {
 
     @CrossOrigin
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    protected ResponseEntity<List<Result>> getMyRecentResults() {
+    protected ResponseEntity<Results> getMyRecentResults() {
         final List<Result> results = resultService.fetchRecentResults();
         return ResponseEntity
                 .status(results.isEmpty()
                         ? HttpStatus.NO_CONTENT
                         : HttpStatus.OK)
-                .body(results);
+                .body(new Results(results));
     }
+
+    public static class Results {
+
+        public final List<Result> results;
+
+        public Results(List<Result> results) {
+            this.results = results;
+        }
+
+    }
+
 }
