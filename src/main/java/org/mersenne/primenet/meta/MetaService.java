@@ -1,11 +1,13 @@
 package org.mersenne.primenet.meta;
 
-import graphql.kickstart.tools.GraphQLResolver;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mersenne.primenet.PrimeNetProperties;
 import org.mersenne.primenet.imports.Import.State;
 import org.mersenne.primenet.imports.ImportRepository;
-import org.mersenne.primenet.meta.MetaService.Meta;
 import org.mersenne.primenet.results.ResultRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
-public class MetaService implements GraphQLResolver<Meta> {
+public class MetaService {
+
+    private static final Logger log = LoggerFactory.getLogger(MetaService.class);
 
     private final ImportRepository importRepository;
 
