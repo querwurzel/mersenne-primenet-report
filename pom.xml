@@ -14,7 +14,7 @@
     <name>PrimeNetReport</name>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <mysql.version>8.0.31</mysql.version>
         <commons.compress.version>1.21</commons.compress.version>
         <xz.version>1.9</xz.version>
