@@ -1,4 +1,4 @@
-package org.mersenne.primenet.compress;
+package org.mersenne.primenet.compression;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.springframework.util.StreamUtils;

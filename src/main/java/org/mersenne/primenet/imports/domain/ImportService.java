@@ -1,11 +1,11 @@
-package org.mersenne.primenet.imports;
+package org.mersenne.primenet.imports.domain;
 
-import org.mersenne.primenet.compress.Bzip2;
-import org.mersenne.primenet.compress.SevenZip;
-import org.mersenne.primenet.api.ResultArchiveClient;
-import org.mersenne.primenet.imports.Import.State;
-import org.mersenne.primenet.results.Result;
-import org.mersenne.primenet.results.ResultRepository;
+import org.mersenne.primenet.compression.Bzip2;
+import org.mersenne.primenet.compression.SevenZip;
+import org.mersenne.primenet.imports.integration.ResultArchiveClient;
+import org.mersenne.primenet.imports.domain.Import.State;
+import org.mersenne.primenet.results.domain.Result;
+import org.mersenne.primenet.results.domain.ResultRepository;
 import org.mersenne.primenet.xml.ResultLine;
 import org.mersenne.primenet.xml.ResultParser;
 import org.mersenne.primenet.xml.Results;
@@ -48,7 +48,7 @@ public class ImportService {
 
     @Scheduled(cron = "33 33 3 * * *")
     @Async
-    protected void processYesterdayImport() {
+    void processYesterdayImport() {
         final LocalDate yesterday = LocalDate.now().minusDays(1);
         log.info("Importing results from yesterday [{}]", yesterday);
         this.importDailyResults(yesterday);
@@ -57,7 +57,7 @@ public class ImportService {
 
     @Scheduled(initialDelay = 2 * 60 * 1000, fixedDelay = 60 * 60 * 1000)
     @Async
-    protected void processPendingImports() {
+    void processPendingImports() {
         final LocalDateTime threshold = LocalDateTime.now().minusDays(1);
         final List<Import> imports = importRepository.findTop180ByStateAndLastAttemptBefore(State.PENDING, threshold);
 
@@ -71,7 +71,7 @@ public class ImportService {
 
     @Scheduled(initialDelay = 60 * 1000, fixedDelay = 12 * 60 * 60 * 1000)
     @Async
-    protected void processStaleImports() {
+    void processStaleImports() {
         final LocalDateTime threshold = LocalDateTime.now().minusHours(12);
         final List<Import> imports = importRepository.findAllByStateAndLastAttemptBefore(State.ACTIVE, threshold);
 
@@ -86,7 +86,7 @@ public class ImportService {
         }
     }
 
-    protected void importAnnualResults(LocalDate year) {
+    void importAnnualResults(LocalDate year) {
         try {
             final List<byte[]> archives = this.parseArchives(resultClient.fetchAnnualReport(year));
             archives.forEach(this::importDailyResults);
@@ -101,7 +101,7 @@ public class ImportService {
         }
     }
 
-    protected void importDailyResults(LocalDate date) {
+    void importDailyResults(LocalDate date) {
         this.importDailyResults(new Import(date));
     }
 

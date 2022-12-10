@@ -1,6 +1,6 @@
-package org.mersenne.primenet.imports;
+package org.mersenne.primenet.imports.domain;
 
-import org.mersenne.primenet.imports.Import.State;
+import org.mersenne.primenet.imports.domain.Import.State;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

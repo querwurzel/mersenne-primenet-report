@@ -1,4 +1,4 @@
-package org.mersenne.primenet.imports;
+package org.mersenne.primenet.imports.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;

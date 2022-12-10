@@ -1,4 +1,4 @@
-package org.mersenne.primenet.results;
+package org.mersenne.primenet.results.domain;
 
 import org.mersenne.primenet.PrimeNetProperties;
 import org.springframework.beans.factory.annotation.Autowired;

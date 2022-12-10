@@ -1,4 +1,4 @@
-package org.mersenne.primenet.imports;
+package org.mersenne.primenet.imports.domain;
 
 import org.mersenne.primenet.PrimeNetProperties;
 import org.slf4j.Logger;
@@ -9,15 +9,15 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-@Service
-public class BootstrapService {
+@Component
+class BootstrapService {
 
     private static final Logger log = LoggerFactory.getLogger(BootstrapService.class);
 

@@ -1,13 +1,9 @@
 package org.mersenne.primenet.meta;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mersenne.primenet.PrimeNetProperties;
-import org.mersenne.primenet.imports.Import.State;
-import org.mersenne.primenet.imports.ImportRepository;
-import org.mersenne.primenet.results.ResultRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mersenne.primenet.imports.domain.Import.State;
+import org.mersenne.primenet.imports.domain.ImportRepository;
+import org.mersenne.primenet.results.domain.ResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -23,8 +19,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class MetaService {
-
-    private static final Logger log = LoggerFactory.getLogger(MetaService.class);
 
     private final ImportRepository importRepository;
 
@@ -42,7 +36,7 @@ public class MetaService {
         this.meta = new AtomicReference<>(new Meta(this.identity));
     }
     
-    @Scheduled(initialDelay = 5 * 60 * 1000, fixedRate = 60 * 60 * 1000)
+    @Scheduled(initialDelay = 5 * 60 * 1000, fixedDelay = 60 * 60 * 1000)
     protected void refreshMeta() {
         this.meta.set(new Meta()
                 .setUser(identity)

@@ -1,4 +1,4 @@
-package org.mersenne.primenet.imports;
+package org.mersenne.primenet.imports.domain;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-public class ImportRepositoryCustomImpl implements ImportRepositoryCustom {
+class ImportRepositoryCustomImpl implements ImportRepositoryCustom {
 
     private final EntityManager entityManager;
 
@@ -23,11 +23,11 @@ public class ImportRepositoryCustomImpl implements ImportRepositoryCustom {
     public boolean hasImports() {
         try {
             final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-            final CriteriaQuery query = cb.createQuery();
-            final Root root = query.from(Import.class);
+            final CriteriaQuery<Import> query = cb.createQuery(Import.class);
+            final Root<Import> root = query.from(Import.class);
             query.select(root.get("date"));
 
-            final TypedQuery result = entityManager.createQuery(query);
+            final TypedQuery<Import> result = entityManager.createQuery(query);
             result.setMaxResults(1);
 
             return Objects.nonNull(result.getSingleResult());

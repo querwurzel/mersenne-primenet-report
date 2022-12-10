@@ -1,7 +1,7 @@
-package org.mersenne.primenet.results;
+package org.mersenne.primenet.results.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.mersenne.primenet.imports.Import;
+import org.mersenne.primenet.imports.domain.Import;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,8 +1,8 @@
-package org.mersenne.primenet.imports;
+package org.mersenne.primenet.imports.domain;
 
 import java.time.LocalDate;
 
-public interface ImportRepositoryCustom {
+interface ImportRepositoryCustom {
 
     boolean hasImports();
 
