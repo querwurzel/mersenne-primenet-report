@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.5</version>
+        <version>2.7.6</version>
     </parent>
 
     <groupId>com.wilke.mersenne</groupId>
@@ -101,9 +101,10 @@
         <profile>
             <id>prod</id>
             <activation>
-                <file>
-                    <missing>.idea</missing>
-                </file>
+                <property>
+                    <name>env</name>
+                    <value>prod</value>
+                </property>
             </activation>
             <dependencies>
                 <dependency>
