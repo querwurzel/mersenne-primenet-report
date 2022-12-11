@@ -1,4 +1,5 @@
 # PrimeNet Report
+[![Java CI](https://github.com/querwurzel/mersenne-primenet-report/actions/workflows/main.yml/badge.svg)](https://github.com/querwurzel/mersenne-primenet-report/actions/workflows/main.yml)
 
 GIMPS, the Great Internet Mersenne Prime Search, was founded in 1996 by George Woltman.
 As the project grew, Scott Kurowski responded with the introduction of PrimeNet
