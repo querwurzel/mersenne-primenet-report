@@ -46,7 +46,9 @@ For productive use run:
 For productive use run:
 `java -Dspring.profiles.active=prod -jar primenetreport.jar`
 
-### Endpoints
+### How to use
+
+http://localhost:8191
 
 * `/results`
     * publishes your results
