@@ -1,4 +1,5 @@
 target/
+build/
 src/main/resources/application-prod.properties
 
 ### IntelliJ IDEA ###
