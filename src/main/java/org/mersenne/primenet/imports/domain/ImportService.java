@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
@@ -165,21 +164,12 @@ public class ImportService {
     }
 
     private void persistImportAndResults(Import theImport, Results result) {
-        int count = 0;
-
-        final List<Result> results = new ArrayList<>(IMPORT_BATCH_SIZE);
-        for (final Iterator<ResultLine> it = result.lines().iterator(); it.hasNext(); it.remove(), count++) {
-            results.add(resultMapper.apply(theImport, it.next()));
-
-            if (results.size() >= IMPORT_BATCH_SIZE) {
-                resultRepository.saveAll(results);
-                results.clear();
-            }
-        }
+        final List<Result> results = result.lines().stream()
+                .map(line -> resultMapper.apply(theImport, line)).toList();
 
         resultRepository.saveAll(results);
         importRepository.save(theImport.succeeded());
-        log.info("Imported {} results of {}", String.format("%1$6s", count), theImport.getDate());
+        log.info("Imported {} results of {}", String.format("%1$6s", results.size()), theImport.getDate());
     }
 
     private static final BiFunction<Import, ResultLine, Result> resultMapper = (theImport, line) -> new Result()
