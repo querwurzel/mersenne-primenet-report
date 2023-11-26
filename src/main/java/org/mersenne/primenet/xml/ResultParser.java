@@ -10,8 +10,8 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mersenne.primenet.xml.ResultParser.ResultSchema.*;
 
@@ -19,9 +19,6 @@ import static org.mersenne.primenet.xml.ResultParser.ResultSchema.*;
 public class ResultParser {
 
     private static final XMLInputFactory factory = XMLInputFactory.newFactory();
-
-    // select avg(c.c) from (select count(date) as c from results group by date) as c;
-    private static final int GIMPS_DAILY_AVG = 40_057;
 
     static {
         factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
@@ -31,8 +28,8 @@ public class ResultParser {
 
     public Results parseResults(InputStream stream) throws XMLStreamException {
         final XMLEventReader reader = factory.createXMLEventReader(stream);
-        final Deque<ResultLine> lines = new ArrayDeque<>(GIMPS_DAILY_AVG);
-        final Results results = new Results(lines);
+        final List<ResultLine> lines = new ArrayList<>();
+        String importDate = null;
 
         try {
             ResultLine result = new ResultLine();
@@ -44,8 +41,13 @@ public class ResultParser {
                     final StartElement element = event.asStartElement();
                     final QName tag = element.getName();
 
+                    if (RESULTS.equals(tag)) {
+                        importDate = element.getAttributeByName(DTSTART).getValue();
+                        continue;
+                    }
+
                     if (RESULT.equals(tag)) {
-                        result.setExponent(element.getAttributeByName(EXPONENT));
+                        result.setExponent(element.getAttributeByName(EXPONENT).getValue());
                         continue;
                     }
 
@@ -83,11 +85,6 @@ public class ResultParser {
                         result.setMessage(reader.getElementText());
                         continue;
                     }
-
-                    if (RESULTS.equals(tag)) {
-                        results.setDate(element.getAttributeByName(DTSTART));
-                        continue;
-                    }
                 }
 
                 if (event.isEndElement()) {
@@ -104,7 +101,7 @@ public class ResultParser {
             reader.close();
         }
 
-        return results;
+        return new Results(importDate, lines);
     }
 
     protected static final class ResultSchema {

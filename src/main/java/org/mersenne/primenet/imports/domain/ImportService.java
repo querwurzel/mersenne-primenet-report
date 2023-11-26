@@ -2,8 +2,8 @@ package org.mersenne.primenet.imports.domain;
 
 import org.mersenne.primenet.compression.Bzip2;
 import org.mersenne.primenet.compression.SevenZip;
-import org.mersenne.primenet.imports.integration.ResultArchiveClient;
 import org.mersenne.primenet.imports.domain.Import.State;
+import org.mersenne.primenet.imports.integration.ResultArchiveClient;
 import org.mersenne.primenet.results.domain.Result;
 import org.mersenne.primenet.results.domain.ResultRepository;
 import org.mersenne.primenet.xml.ResultLine;
@@ -24,13 +24,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
 
 @Service
 public class ImportService {
 
     private static final Logger log = LoggerFactory.getLogger(ImportService.class);
+    private static final int IMPORT_BATCH_SIZE = 10_000;
 
     private final ImportRepository importRepository;
     private final ResultRepository resultRepository;
@@ -161,14 +165,13 @@ public class ImportService {
     }
 
     private void persistImportAndResults(Import theImport, Results result) {
-        final int count = result.size();
-        final int chunkSize = 10_000;
-        final List<Result> results = new ArrayList<>(chunkSize);
+        int count = 0;
 
-        for (final Iterator<ResultLine> it = result.getLines().iterator(); it.hasNext(); it.remove()) {
+        final List<Result> results = new ArrayList<>(IMPORT_BATCH_SIZE);
+        for (final Iterator<ResultLine> it = result.lines().iterator(); it.hasNext(); it.remove(), count++) {
             results.add(resultMapper.apply(theImport, it.next()));
 
-            if (results.size() >= chunkSize) {
+            if (results.size() >= IMPORT_BATCH_SIZE) {
                 resultRepository.saveAll(results);
                 results.clear();
             }

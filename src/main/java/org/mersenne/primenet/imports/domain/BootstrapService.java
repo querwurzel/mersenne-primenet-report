@@ -31,7 +31,7 @@ class BootstrapService {
     public BootstrapService(ImportRepository importRepository, ImportService importService, PrimeNetProperties primeNetProperties) {
         this.importRepository = importRepository;
         this.importService = importService;
-        this.importStart = primeNetProperties.getStart();
+        this.importStart = primeNetProperties.start();
     }
 
     @Bean
@@ -56,7 +56,7 @@ class BootstrapService {
     }
 
     private void bootstrapAnnualImports() {
-        final SortedSet<LocalDate> years = selectAnnualImports(importStart);
+        final SortedSet<LocalDate> years = calculateAnnualImports(importStart);
         years.forEach(year -> {
             log.info("Importing annual results for year {}", year.getYear());
             importService.importAnnualResults(year);
@@ -65,7 +65,7 @@ class BootstrapService {
     }
 
     private void bootstrapDailyImports() {
-        final SortedSet<LocalDate> days = selectDailyImports(importStart);
+        final SortedSet<LocalDate> days = calculateDailyImports(importStart);
         days.removeAll(importRepository.findAllDates());
 
         if (!days.isEmpty()) {
@@ -75,7 +75,7 @@ class BootstrapService {
         }
     }
 
-    private static SortedSet<LocalDate> selectAnnualImports(LocalDate inclusiveStart) {
+    private static SortedSet<LocalDate> calculateAnnualImports(LocalDate inclusiveStart) {
         final SortedSet<LocalDate> missing = new TreeSet<>();
 
         for (LocalDate year = LocalDate.now().minusYears(1).with(TemporalAdjusters.firstDayOfYear());
@@ -88,7 +88,7 @@ class BootstrapService {
         return missing;
     }
 
-    private static SortedSet<LocalDate> selectDailyImports(LocalDate inclusiveStart) {
+    private static SortedSet<LocalDate> calculateDailyImports(LocalDate inclusiveStart) {
         final SortedSet<LocalDate> missing = new TreeSet<>();
 
         for (LocalDate day = LocalDate.now().minusDays(1);

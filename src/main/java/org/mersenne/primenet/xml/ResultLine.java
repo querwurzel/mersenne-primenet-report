@@ -1,6 +1,5 @@
 package org.mersenne.primenet.xml;
 
-import javax.xml.stream.events.Attribute;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -24,63 +23,11 @@ public final class ResultLine {
     private String assignmentAge;
     private String message;
 
-    public String getExponent() {
-        return exponent;
-    }
-
-    protected void setExponent(Attribute exponent) {
-        this.exponent = exponent.getValue();
-    }
-
-    public void setExponent(String exponent) {
-        this.exponent = exponent;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getComputerName() {
-        return computerName;
-    }
-
-    public void setComputerName(String computerName) {
-        this.computerName = computerName;
-    }
-
-    public String getResultType() {
-        return resultType;
-    }
-
-    public void setResultType(String resultType) {
-        this.resultType = resultType;
-    }
-
-    public String getGhzDays() {
-        return ghzDays;
-    }
-
-    public void setGhzDays(String ghzDays) {
-        this.ghzDays = ghzDays;
-    }
-
-    public String getDateReceived() {
-        return dateReceived;
-    }
-
-    public void setDateReceived(String dateReceived) {
-        this.dateReceived = dateReceived;
-    }
-
     public LocalDate parseDate() {
         for (DateTimeFormatter format : knownFormats) {
             try {
                 return LocalDate.parse(this.dateReceived, format);
-            } catch (DateTimeParseException e) {
+            } catch (DateTimeParseException ignored) {
                 continue;
             }
         }
@@ -92,7 +39,7 @@ public final class ResultLine {
         for (DateTimeFormatter format : knownFormats) {
             try {
                 return LocalTime.parse(this.dateReceived, format);
-            } catch (DateTimeParseException e) {
+            } catch (DateTimeParseException ignored) {
                 continue;
             }
         }
@@ -100,19 +47,67 @@ public final class ResultLine {
         throw new DateTimeParseException("Unknown format", this.dateReceived, 0);
     }
 
-    public String getAssignmentAge() {
-        return assignmentAge;
+    public String getExponent() {
+        return exponent;
     }
 
-    public void setAssignmentAge(String assignmentAge) {
-        this.assignmentAge = assignmentAge;
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getComputerName() {
+        return computerName;
+    }
+
+    public String getResultType() {
+        return resultType;
+    }
+
+    public String getGhzDays() {
+        return ghzDays;
+    }
+
+    public String getDateReceived() {
+        return dateReceived;
+    }
+
+    public String getAssignmentAge() {
+        return assignmentAge;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    void setExponent(String exponent) {
+        this.exponent = exponent;
+    }
+
+    void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    void setComputerName(String computerName) {
+        this.computerName = computerName;
+    }
+
+    void setResultType(String resultType) {
+        this.resultType = resultType;
+    }
+
+    void setGhzDays(String ghzDays) {
+        this.ghzDays = ghzDays;
+    }
+
+    void setDateReceived(String dateReceived) {
+        this.dateReceived = dateReceived;
+    }
+
+    void setAssignmentAge(String assignmentAge) {
+        this.assignmentAge = assignmentAge;
+    }
+
+    void setMessage(String message) {
         this.message = message;
     }
 

@@ -31,7 +31,7 @@ Have a look into the [application-sample.properties](https://github.com/querwurz
     * `server.port`
 * starting date of imports (YYYY-MM-DD; defaults to yesterday, 1997-11-11 is the very beginning)
     * `imports.start`
-* own username for export endpoint (defaults to anonymous)
+* own username for export endpoint (default: _ANONYMOUS_)
     * `imports.identity`
 * MySQL connectivity, database, user, password (default: localhost:3306)
     * `spring.datasource.url`
@@ -39,12 +39,16 @@ Have a look into the [application-sample.properties](https://github.com/querwurz
 ### How to build
 
 For productive use run:
-`mvn -P prod package`
+```console
+./mvnw -P prod package
+```
 
 ### How to run
 
 For productive use run:
-`java -Dspring.profiles.active=prod -jar primenetreport.jar`
+```console
+java -Dspring.profiles.active=prod -jar primenetreport.jar
+```
 
 ### How to use
 
