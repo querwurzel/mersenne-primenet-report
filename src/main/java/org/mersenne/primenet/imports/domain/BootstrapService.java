@@ -21,9 +21,7 @@ class BootstrapService {
     private static final Logger log = LoggerFactory.getLogger(BootstrapService.class);
 
     private final ImportRepository importRepository;
-
     private final ImportService importService;
-
     private final LocalDate importStart;
 
     @Autowired

@@ -32,11 +32,9 @@ import java.util.function.BiFunction;
 public class ImportService {
 
     private static final Logger log = LoggerFactory.getLogger(ImportService.class);
-    private static final int IMPORT_BATCH_SIZE = 10_000;
 
     private final ImportRepository importRepository;
     private final ResultRepository resultRepository;
-
     private final ResultArchiveClient resultClient;
     private final ResultParser resultParser;
 
