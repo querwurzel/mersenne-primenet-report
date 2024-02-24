@@ -1,11 +1,13 @@
-package org.mersenne.primenet.imports.domain;
+package org.mersenne.primenet.imports.application;
 
 import org.mersenne.primenet.compression.Bzip2;
 import org.mersenne.primenet.compression.SevenZip;
+import org.mersenne.primenet.imports.domain.Import;
 import org.mersenne.primenet.imports.domain.Import.State;
+import org.mersenne.primenet.imports.domain.ImportRepository;
 import org.mersenne.primenet.imports.integration.ResultArchiveClient;
-import org.mersenne.primenet.results.domain.Result;
-import org.mersenne.primenet.results.domain.ResultRepository;
+import org.mersenne.primenet.imports.domain.Result;
+import org.mersenne.primenet.imports.domain.ResultRepository;
 import org.mersenne.primenet.xml.ResultLine;
 import org.mersenne.primenet.xml.ResultParser;
 import org.mersenne.primenet.xml.Results;
@@ -150,7 +152,7 @@ public class ImportService {
 
     private List<byte[]> parseArchives(byte[] annualArchive) throws IOException, NoSuchElementException {
         final List<byte[]> dailyArchives = new ArrayList<>(365);
-        SevenZip.extract(annualArchive).forEach(dailyArchives::add);
+        SevenZip.stream(annualArchive).forEach(dailyArchives::add);
         return dailyArchives;
     }
 

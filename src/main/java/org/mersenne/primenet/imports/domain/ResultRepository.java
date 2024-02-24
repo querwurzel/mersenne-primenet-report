@@ -1,4 +1,4 @@
-package org.mersenne.primenet.results.domain;
+package org.mersenne.primenet.imports.domain;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

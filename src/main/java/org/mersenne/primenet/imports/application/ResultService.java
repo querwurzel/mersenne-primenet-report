@@ -1,8 +1,8 @@
-package org.mersenne.primenet.results.application;
+package org.mersenne.primenet.imports.application;
 
 import org.mersenne.primenet.PrimeNetProperties;
-import org.mersenne.primenet.results.domain.Result;
-import org.mersenne.primenet.results.domain.ResultRepository;
+import org.mersenne.primenet.imports.domain.Result;
+import org.mersenne.primenet.imports.domain.ResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

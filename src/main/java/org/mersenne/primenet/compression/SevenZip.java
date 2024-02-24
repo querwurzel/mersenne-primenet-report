@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public final class SevenZip implements Iterable<byte[]>, Iterator<byte[]> {
 
@@ -24,8 +26,8 @@ public final class SevenZip implements Iterable<byte[]>, Iterator<byte[]> {
         log.debug("Reading 7zip archive of {} bytes", archive.length);
     }
 
-    public static Iterable<byte[]> extract(byte[] archive) throws IOException {
-        return new SevenZip(archive);
+    public static Stream<byte[]> stream(byte[] archive) throws IOException {
+        return StreamSupport.stream(new SevenZip(archive).spliterator(), false);
     }
 
     @Override

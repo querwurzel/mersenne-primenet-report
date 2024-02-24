@@ -9,7 +9,7 @@ import org.mersenne.primenet.meta.application.model.MetaInformation;
 import org.mersenne.primenet.meta.application.model.MetaInformation.ImportInformation;
 import org.mersenne.primenet.meta.application.model.MetaInformation.ResultInformation;
 import org.mersenne.primenet.meta.application.model.MetaInformation.UserInformation;
-import org.mersenne.primenet.results.domain.ResultRepository;
+import org.mersenne.primenet.imports.domain.ResultRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

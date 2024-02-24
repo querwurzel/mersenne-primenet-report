@@ -25,13 +25,13 @@ public class Import implements Serializable {
     private State state = State.PENDING;
     private String reason;
 
-    public Import() {}
+    private Import() {}
 
     public Import(LocalDate date) {
         this.date = Objects.requireNonNull(date);
     }
 
-    protected Import reset() {
+    public Import reset() {
         this.attempts = 0;
         this.lastAttempt = null;
         this.reason = null;
@@ -39,11 +39,11 @@ public class Import implements Serializable {
         return this;
     }
 
-    protected boolean hasNextAttempt() {
+    public boolean hasNextAttempt() {
         return this.attempts < MAX_ATTEMPTS;
     }
 
-    protected Import nextAttempt() {
+    public Import nextAttempt() {
         if (this.hasNextAttempt()) {
             this.lastAttempt = LocalDateTime.now();
             this.state = State.ACTIVE;
@@ -53,16 +53,16 @@ public class Import implements Serializable {
         throw new IllegalStateException("Import has reached max attempts");
     }
 
-    protected Import succeeded() {
+    public Import succeeded() {
         return this.handleSuccess();
     }
 
     @SuppressWarnings("unused")
-    protected Import failed() {
+    public Import failed() {
         return this.handleNonSuccess(null);
     }
 
-    protected Import failed(String reason) {
+    public Import failed(String reason) {
         return this.handleNonSuccess(reason);
     }
 

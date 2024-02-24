@@ -1,7 +1,7 @@
-package org.mersenne.primenet.results.api;
+package org.mersenne.primenet.imports.api;
 
-import org.mersenne.primenet.results.application.ResultService;
-import org.mersenne.primenet.results.domain.Result;
+import org.mersenne.primenet.imports.application.ResultService;
+import org.mersenne.primenet.imports.domain.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

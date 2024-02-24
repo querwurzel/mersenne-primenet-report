@@ -1,8 +1,7 @@
-package org.mersenne.primenet.results.domain;
+package org.mersenne.primenet.imports.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.mersenne.primenet.imports.domain.Import;
 
 import java.io.Serializable;
 import java.time.LocalDate;

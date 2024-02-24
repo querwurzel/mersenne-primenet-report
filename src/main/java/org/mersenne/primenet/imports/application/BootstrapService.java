@@ -1,6 +1,7 @@
-package org.mersenne.primenet.imports.domain;
+package org.mersenne.primenet.imports.application;
 
 import org.mersenne.primenet.PrimeNetProperties;
+import org.mersenne.primenet.imports.domain.ImportRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

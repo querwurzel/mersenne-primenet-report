@@ -34,7 +34,7 @@ public class ResultArchiveClient {
     }
 
     public byte[] fetchDailyReport(String url) {
-        log.debug("Fetching daily report using url {}", url);
+        log.debug("Fetching daily report from {}", url);
         return restTemplate.getForObject(url, byte[].class);
     }
 
@@ -47,7 +47,7 @@ public class ResultArchiveClient {
     }
 
     public byte[] fetchAnnualReport(String url) {
-        log.debug("Fetching annual report using url {}", url);
+        log.debug("Fetching annual report from {}", url);
         return restTemplate.getForObject(url, byte[].class);
     }
 }
