@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +34,6 @@ class BootstrapService {
     }
 
     @Bean
-    @Lazy
     protected ApplicationRunner importBootstrapper() {
         return new ApplicationRunner() {
             @Async
