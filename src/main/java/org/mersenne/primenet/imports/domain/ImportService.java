@@ -13,11 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -80,10 +79,10 @@ public class ImportService {
 
         if (!imports.isEmpty()) {
             log.warn("Resetting {} stale imports!", imports.size());
-            imports.forEach(theImport -> {
-                theImport.reset();
-                resultRepository.deleteAllByDate(theImport.getDate());
-            });
+            for (Import anImport : imports) {
+                anImport.reset();
+                resultRepository.deleteAllByDate(anImport.getDate());
+            }
             importRepository.saveAll(imports);
             System.gc();
         }
@@ -92,13 +91,11 @@ public class ImportService {
     void importAnnualResults(LocalDate year) {
         try {
             final List<byte[]> archives = this.parseArchives(resultClient.fetchAnnualReport(year));
-            archives.forEach(this::importDailyResults);
-        } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND || e.getStatusCode() == HttpStatus.FORBIDDEN) {
-                log.error("Failed to fetch result archive of {}, HTTP {}", year.getYear(), e.getStatusCode());
-            } else {
-                log.error("Failed to fetch annual archive of {}", year.getYear(), e);
+            for (byte[] archive : archives) {
+                this.importDailyResults(archive);
             }
+        } catch (RestClientException e) {
+            log.error("Failed to fetch annual archive of {}", year.getYear(), e);
         } catch (IOException | NoSuchElementException e) {
             log.error("Failed to extract annual archive for {}", year.getYear(), e);
         }
@@ -133,12 +130,8 @@ public class ImportService {
             final byte[] archive = resultClient.fetchDailyReport(theImport.getDate());
             final Results results = this.parseResults(archive);
             this.persistImportAndResults(theImport, results);
-        } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND || e.getStatusCode() == HttpStatus.FORBIDDEN) {
-                log.error("Failed to fetch daily archive of {}, HTTP {}", anImport.getDate(), e.getStatusCode());
-            } else {
-                log.error("Failed to fetch daily archive of {}", anImport.getDate(), e);
-            }
+        } catch (RestClientException e) {
+            log.error("Failed to fetch daily archive of {}", anImport.getDate(), e);
             importRepository.save(anImport.failed(e.getMessage()));
         } catch (IOException | XMLStreamException e) {
             log.error("Failed to parse results of {}", anImport.getDate(), e);
@@ -165,7 +158,8 @@ public class ImportService {
 
     private void persistImportAndResults(Import theImport, Results result) {
         final List<Result> results = result.lines().stream()
-                .map(line -> resultMapper.apply(theImport, line)).toList();
+                .map(line -> resultMapper.apply(theImport, line))
+                .toList();
 
         resultRepository.saveAll(results);
         importRepository.save(theImport.succeeded());

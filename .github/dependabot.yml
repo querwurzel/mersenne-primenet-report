@@ -7,10 +7,10 @@ version: 2
 updates:
   - package-ecosystem: "maven" # See documentation for possible values
     directory: "/" # Location of package manifests
-    open-pull-requests-limit: 20
+    open-pull-requests-limit: 10
     schedule:
       interval: "monthly"
     groups:
-      gradle:
+      maven:
         patterns:
           - "*"
