@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.3</version>
+        <version>3.2.5</version>
     </parent>
 
     <groupId>com.wilke.mersenne</groupId>
@@ -16,9 +16,10 @@
     <properties>
         <java.version>17</java.version>
         <mysql.version>8.3.0</mysql.version>
-        <commons.compress.version>1.26.0</commons.compress.version>
+        <commons.compress.version>1.26.1</commons.compress.version>
+        <maven-wrapper-plugin.version>3.3.1</maven-wrapper-plugin.version>
         <xz.version>1.9</xz.version>
-        <junixsocket.version>2.9.0</junixsocket.version>
+        <junixsocket.version>2.9.1</junixsocket.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -69,6 +70,17 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <directory>build</directory>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-wrapper-plugin</artifactId>
+                    <version>${maven-wrapper-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

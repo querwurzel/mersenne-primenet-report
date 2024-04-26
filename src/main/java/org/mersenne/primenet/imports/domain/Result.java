@@ -43,7 +43,7 @@ public class Result implements Serializable {
 
     @Transient
     public String getUrl() {
-        return "https://www.mersenne.org/report_exponent/?full=1&exp_lo=" + this.exponent;
+        return "https://www.mersenne.org/report_exponent/?exp_lo=" + exponent + "&full=1";
     }
 
     @Transient
