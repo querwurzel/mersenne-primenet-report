@@ -17,7 +17,7 @@ More information:
 
 ### Requirements
 
-* JDK 17+
+* JDK 21+
 * MySQL 8+
 
 ### How to configure
