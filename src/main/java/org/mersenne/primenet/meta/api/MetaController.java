@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/results/meta")
-public class MetaController {
+class MetaController {
 
     private final MetaService metaService;
 
@@ -22,7 +22,7 @@ public class MetaController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    MetaInformation getMetaInformation() {
+    public MetaInformation getMetaInformation() {
         return metaService.getMeta()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT));
     }

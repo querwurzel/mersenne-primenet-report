@@ -27,9 +27,7 @@ public final class ResultLine {
         for (DateTimeFormatter format : knownFormats) {
             try {
                 return LocalDate.parse(this.dateReceived, format);
-            } catch (DateTimeParseException ignored) {
-                continue;
-            }
+            } catch (DateTimeParseException ignored) {}
         }
 
         throw new DateTimeParseException("Unknown format", this.dateReceived, 0);
@@ -39,9 +37,7 @@ public final class ResultLine {
         for (DateTimeFormatter format : knownFormats) {
             try {
                 return LocalTime.parse(this.dateReceived, format);
-            } catch (DateTimeParseException ignored) {
-                continue;
-            }
+            } catch (DateTimeParseException ignored) {}
         }
 
         throw new DateTimeParseException("Unknown format", this.dateReceived, 0);

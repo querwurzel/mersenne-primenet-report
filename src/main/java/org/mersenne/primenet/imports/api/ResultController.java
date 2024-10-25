@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping({"/results", "/"})
-public class ResultController {
+class ResultController {
 
     private final ResultService resultService;
 
@@ -26,16 +26,12 @@ public class ResultController {
 
     @CrossOrigin
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Results> getMyRecentResults() {
+    public ResponseEntity<Results> getMyRecentResults() {
         final List<Result> results = resultService.fetchRecentResults();
-        return ResponseEntity
-                .status(results.isEmpty()
-                        ? HttpStatus.NO_CONTENT
-                        : HttpStatus.OK)
-                .body(new Results(results));
+        return new ResponseEntity<>(new Results(results), HttpStatus.OK);
     }
 
-    public record Results(
+    record Results(
             List<Result> results
     ) {}
 }

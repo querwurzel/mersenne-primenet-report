@@ -1,7 +1,5 @@
 package org.mersenne.primenet.meta.application;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mersenne.primenet.PrimeNetProperties;
 import org.mersenne.primenet.imports.domain.Import.State;
 import org.mersenne.primenet.imports.domain.ImportRepository;
@@ -38,22 +36,25 @@ public class MetaService {
     private final String identity;
 
     @Autowired
-    public MetaService(ImportRepository importRepository, ResultRepository resultRepository, PrimeNetProperties primeNetProperties) {
+    public MetaService(
+            final ImportRepository importRepository,
+            final ResultRepository resultRepository,
+            final PrimeNetProperties primeNetProperties
+    ) {
         this.importRepository = importRepository;
         this.resultRepository = resultRepository;
         this.identity = primeNetProperties.identity();
         this.meta = new AtomicReference<>();
     }
-    
+
     @Scheduled(initialDelay = 1, fixedDelay = 60, timeUnit = TimeUnit.MINUTES)
     private void refreshMetaInformation() {
-        this.meta.set(
-                new MetaInformation(
-                    LocalDateTime.now(),
-                    new UserInformation(identity, countResultsByUserName(identity)),
-                    new ImportInformation(countImportsPerState()),
-                    new ResultInformation(countResults())
-                ));
+        this.meta.set(new MetaInformation(
+                LocalDateTime.now(),
+                new UserInformation(identity, countResultsByUserName(identity)),
+                new ImportInformation(countImportsPerState()),
+                new ResultInformation(countResults())
+        ));
         log.debug("Updated meta information");
     }
 
