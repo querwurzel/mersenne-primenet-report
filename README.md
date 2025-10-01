@@ -4,7 +4,7 @@
 GIMPS, the Great Internet Mersenne Prime Search, was founded in 1996 by George Woltman.
 As the project grew, Scott Kurowski responded with the introduction of PrimeNet
 and its ability to manage thousands of volunteers and millions of work assignments.
-There are currently 51 known Mersenne primes, 17 discovered by GIMPS (_state 2019-02-23_).
+There are currently 52 known Mersenne primes, 18 discovered by GIMPS (_state 2025-10-01_).
 
 As a GIMPS volunteer I wanted to observe and share my own results
 while growing a database to perform statistics, time series analysis and means of data science.
