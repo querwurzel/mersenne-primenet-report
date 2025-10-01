@@ -25,7 +25,7 @@ public class Import implements Serializable {
     private State state = State.PENDING;
     private String reason;
 
-    private Import() {}
+    protected Import() {}
 
     public Import(LocalDate date) {
         this.date = Objects.requireNonNull(date);
