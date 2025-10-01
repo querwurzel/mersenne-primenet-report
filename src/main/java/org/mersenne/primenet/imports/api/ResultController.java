@@ -26,7 +26,7 @@ class ResultController {
 
     @CrossOrigin
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Results> getMyRecentResults() {
+    ResponseEntity<Results> getMyRecentResults() {
         final List<Result> results = resultService.fetchRecentResults();
         return new ResponseEntity<>(new Results(results), HttpStatus.OK);
     }
