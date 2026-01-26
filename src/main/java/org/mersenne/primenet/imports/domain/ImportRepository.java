@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 @Repository
 public interface ImportRepository extends ImportRepositoryCustom, JpaRepository<Import, LocalDate> {
@@ -19,6 +20,8 @@ public interface ImportRepository extends ImportRepositoryCustom, JpaRepository<
     // used for bootstrapping imports
     @Query("SELECT date FROM #{#entityName}")
     List<LocalDate> findAllDates();
+
+    Optional<Import> findTopByOrderByDateDesc();
 
     // used for cleanup
     List<Import> findAllByStateAndLastAttemptBefore(State state, LocalDateTime lastAttempt);

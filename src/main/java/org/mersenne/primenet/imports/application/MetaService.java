@@ -1,6 +1,7 @@
 package org.mersenne.primenet.imports.application;
 
 import org.mersenne.primenet.PrimeNetProperties;
+import org.mersenne.primenet.imports.domain.Import;
 import org.mersenne.primenet.imports.domain.Import.State;
 import org.mersenne.primenet.imports.domain.ImportRepository;
 import org.mersenne.primenet.imports.application.model.MetaInformation;
@@ -52,7 +53,10 @@ public class MetaService {
         this.meta.set(new MetaInformation(
                 LocalDateTime.now(),
                 new UserInformation(identity, countResultsByUserName(identity)),
-                new ImportInformation(countImportsPerState()),
+                new ImportInformation(
+                        importRepository.findTopByOrderByDateDesc().map(Import::getDate).orElse(null),
+                        countImportsPerState()
+                ),
                 new ResultInformation(countResults())
         ));
         log.debug("Updated meta information");
