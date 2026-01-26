@@ -46,7 +46,7 @@ class BootstrapService {
                     BootstrapService.this.bootstrapAnnualImports();
                     BootstrapService.this.bootstrapDailyImports();
                 }
-                log.info("Bootstrapping complete");
+                log.info("Bootstrapping complete since {}", importStart);
                 System.gc();
             }
         };
