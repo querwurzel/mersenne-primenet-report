@@ -1,4 +1,4 @@
-package org.mersenne.primenet.meta.application.model;
+package org.mersenne.primenet.imports.application.model;
 
 import org.mersenne.primenet.imports.domain.Import;
 

@@ -1,12 +1,12 @@
-package org.mersenne.primenet.meta.application;
+package org.mersenne.primenet.imports.application;
 
 import org.mersenne.primenet.PrimeNetProperties;
 import org.mersenne.primenet.imports.domain.Import.State;
 import org.mersenne.primenet.imports.domain.ImportRepository;
-import org.mersenne.primenet.meta.application.model.MetaInformation;
-import org.mersenne.primenet.meta.application.model.MetaInformation.ImportInformation;
-import org.mersenne.primenet.meta.application.model.MetaInformation.ResultInformation;
-import org.mersenne.primenet.meta.application.model.MetaInformation.UserInformation;
+import org.mersenne.primenet.imports.application.model.MetaInformation;
+import org.mersenne.primenet.imports.application.model.MetaInformation.ImportInformation;
+import org.mersenne.primenet.imports.application.model.MetaInformation.ResultInformation;
+import org.mersenne.primenet.imports.application.model.MetaInformation.UserInformation;
 import org.mersenne.primenet.imports.domain.ResultRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

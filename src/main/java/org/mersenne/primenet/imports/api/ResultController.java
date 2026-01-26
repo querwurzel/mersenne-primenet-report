@@ -3,7 +3,6 @@ package org.mersenne.primenet.imports.api;
 import org.mersenne.primenet.imports.application.ResultService;
 import org.mersenne.primenet.imports.domain.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,7 +27,7 @@ class ResultController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Results> getMyRecentResults() {
         final List<Result> results = resultService.fetchRecentResults();
-        return new ResponseEntity<>(new Results(results), HttpStatus.OK);
+        return ResponseEntity.ok(new Results(results));
     }
 
     record Results(

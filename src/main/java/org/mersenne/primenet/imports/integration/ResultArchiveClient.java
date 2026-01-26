@@ -3,9 +3,8 @@ package org.mersenne.primenet.imports.integration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -15,14 +14,16 @@ public class ResultArchiveClient {
 
     private static final Logger log = LoggerFactory.getLogger(ResultArchiveClient.class);
 
-    private static final String annualUrl = "https://www.mersenne.org/result_archive/%d.7z";
-    private static final String dailyUrl  = "https://www.mersenne.org/result_archive/%d/%s.xml.bz2";
+    private static final String annualUrl = "/result_archive/%d.7z";
+    private static final String dailyUrl  = "/result_archive/%d/%s.xml.bz2";
 
-    private final RestTemplate restTemplate;
+    private final RestClient client;
 
     @Autowired
-    public ResultArchiveClient(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
+    public ResultArchiveClient() {
+        this.client = RestClient.builder()
+                .baseUrl("https://www.mersenne.org")
+                .build();
     }
 
     public byte[] fetchDailyReport(LocalDate date) {
@@ -35,7 +36,7 @@ public class ResultArchiveClient {
 
     public byte[] fetchDailyReport(String url) {
         log.debug("Fetching daily report from {}", url);
-        return restTemplate.getForObject(url, byte[].class);
+        return client.get().retrieve().body(byte[].class);
     }
 
     public byte[] fetchAnnualReport(LocalDate date) {
@@ -48,6 +49,6 @@ public class ResultArchiveClient {
 
     public byte[] fetchAnnualReport(String url) {
         log.debug("Fetching annual report from {}", url);
-        return restTemplate.getForObject(url, byte[].class);
+        return client.get().retrieve().body(byte[].class);
     }
 }

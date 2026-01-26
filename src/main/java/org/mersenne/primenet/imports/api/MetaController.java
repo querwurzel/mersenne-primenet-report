@@ -1,7 +1,7 @@
-package org.mersenne.primenet.meta.api;
+package org.mersenne.primenet.imports.api;
 
-import org.mersenne.primenet.meta.application.MetaService;
-import org.mersenne.primenet.meta.application.model.MetaInformation;
+import org.mersenne.primenet.imports.application.MetaService;
+import org.mersenne.primenet.imports.application.model.MetaInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
